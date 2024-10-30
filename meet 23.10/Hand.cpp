@@ -1,25 +1,42 @@
 #include "Hand.hpp"
 #include <iostream>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <random>
+#include "Card.hpp"
+
 
 namespace CardGame {
 
-    CardGame::Card Hand::Show(int num) const {
-        if (num < 0 || num >= cards_.size()) {
-            throw std::out_of_range("Индекс карты вне диапазона");
-        }
-        return cards_[num];
-    }
+    class Hand {
+    private:
+        std::vector<Card> hand;
 
-    CardGame::Card Hand::GetCard(int num) {
-        if (num < 0 || num >= cards_.size()) {
-            throw std::out_of_range("Индекс карты вне диапазона");
-        }
-        CardGame::Card card = cards_[num];
-        cards_.erase(cards_.begin() + num);
-        return card;
-    }
+    public:
+        Hand() {}
 
-    void Hand::PlaceCard(const CardGame::Card& new_card) {
-        cards_.push_back(new_card);
-    }
+        ~Hand() {}
+
+        void addCard(const Card& card) {
+            hand.push_back(card);
+        }
+
+        bool removeCard(const Card& card) {
+            for (auto it = hand.begin(); it != hand.end(); ++it) {
+                if (it->suit == card.suit && it->rank == card.rank) {
+                    hand.erase(it);
+                    return true; 
+                }
+            }
+            return false; 
+        }
+
+        void showHand() const {
+            std::cout << "Hand contains:\n";
+            for (const auto& card : hand) {
+                std::cout << card.toString() << std::endl;
+            }
+        }
+    };
 }
